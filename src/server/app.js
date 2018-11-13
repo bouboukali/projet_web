@@ -18,6 +18,7 @@ const projectRoot = path.join(__dirname, '../..');
 const serverRoot = path.join(__dirname, '.');
 
 const app = express();
+/*Nawfal a commit*/ 
 
 // Connect to DB, and insert default user if necessary
 db.connect().then((db) => {
