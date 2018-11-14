@@ -13,7 +13,8 @@ function buildConfig(env, argv) {
     name: 'base',
     context: projectRoot,
     entry: {
-      application: './src/client/entries/application.js'
+      application: './src/client/entries/application.js',
+      auth0: './node_modules/auth0-js/build/auth0.js'
     },
     resolve: {
       extensions: ['.js', '.jsx', '.json'],
