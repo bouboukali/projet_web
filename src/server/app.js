@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+var cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
@@ -18,7 +19,8 @@ const projectRoot = path.join(__dirname, '../..');
 const serverRoot = path.join(__dirname, '.');
 
 const app = express();
-/*Nawfal a commit.*/ 
+app.use(cors()); // add the CORS middleware so that our Express server can handle requests from different origins.
+/*Nawfal a commit.*/
 
 // Connect to DB, and insert default user if necessary
 db.connect().then((db) => {
