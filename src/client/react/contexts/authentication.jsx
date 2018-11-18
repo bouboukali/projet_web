@@ -2,18 +2,32 @@ import React from 'react';
 import withContextConsumer from 'react/utils/with_context_consumer.jsx';
 import * as Session from 'react/services/session.js'
 
+import auth0 from 'auth0-js';
+
 const AuthenticationContext = React.createContext({
   jwt: null,
   isAuthenticated: false,
-  login: () => {},
-  logout: () => {}
+  login: () => { },
+  logout: () => { }
 });
 
 const AuthenticationConsumer = AuthenticationContext.Consumer;
 
+
+
 class AuthenticationProvider extends React.Component {
+
+
   constructor(props) {
     super(props);
+
+    this.auth0 = new auth0.WebAuth({
+      domain: process.env.AUTH0_DOMAIN,
+      clientID: process.env.AUTH0_CLIENT_ID,
+      redirectUri: 'http://localhost:3000/callback',
+      responseType: 'token id_token',// rajouté nore token jwt si jme trompe ps
+      scope: 'openid'
+    });
 
     const jwt = localStorage.getItem("JWT");
     const isAuthenticated = !!jwt;
@@ -26,11 +40,16 @@ class AuthenticationProvider extends React.Component {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
   }
-  
+
+  login2222 = () => {
+    this.auth0.authorize();
+  }
+
+
   login({ email, password }) {
     return Session
       .createSession(email, password)
-      .then( jwt => {
+      .then(jwt => {
         this.setState({
           jwt: jwt,
           isAuthenticated: !!jwt,
@@ -41,8 +60,8 @@ class AuthenticationProvider extends React.Component {
     Session.deleteSession();
 
     this.setState({
-          jwt: null,
-          isAuthenticated: false,
+      jwt: null,
+      isAuthenticated: false,
     });
   }
 
@@ -67,7 +86,7 @@ class AuthenticationProvider extends React.Component {
 
 const withAuthentication = withContextConsumer(AuthenticationConsumer);
 
-export { 
+export {
   AuthenticationConsumer,
   AuthenticationProvider,
   withAuthentication,
