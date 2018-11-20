@@ -37,6 +37,8 @@ class LoginContainer extends React.Component {
 
         super(props);
 
+        console.log(props)
+
         this.state = {
             email: "",
             password: "",

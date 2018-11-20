@@ -6,7 +6,6 @@ const withContextConsumer = ContextConsumer => (
 
       <ContextConsumer>
 
-
         {context => <WrappedComponent {...props} {...context} />}
       </ContextConsumer>
     )

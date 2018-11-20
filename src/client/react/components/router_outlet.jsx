@@ -9,9 +9,22 @@ import MessagesContainer from "./messages/messages_container";
 import MessageContainer from "./message/message_container";
 import LoginContainer from "./login/login_container";
 
-function RouterOutlet({ isAuthenticated, location: { pathname } }) {
+import Callback from './callback/Callback';
 
-  const redirectToLogin = !isAuthenticated && pathname !== "/login";
+
+
+function RouterOutlet({ handleAuthentication, auth0, isAuthenticated, location }) {
+
+  const maFonction = ({ location }) => {
+    console.log(location)
+    if (/access_token|id_token|error/.test(location.hash)) {
+
+      handleAuthentication();
+    }
+  }
+
+
+  const redirectToLogin = !isAuthenticated && location.pathname !== "/login";
 
 
   return (
@@ -28,8 +41,8 @@ function RouterOutlet({ isAuthenticated, location: { pathname } }) {
 
     <React.Fragment>
 
-      {redirectToLogin && <Redirect to="/login" />}
-      {!redirectToLogin &&
+      {/*redirectToLogin && <Redirect to="/login" />*/}
+      {/*!redirectToLogin && */
         <React.Fragment>
           <Route exact path="/" render={() => <HelloWorld name="bob" />} />
           <Route path="/hello/:name" component={HelloFromParams} />
@@ -39,6 +52,22 @@ function RouterOutlet({ isAuthenticated, location: { pathname } }) {
 
 
           <Route path="/login" component={LoginContainer} />
+
+
+
+          <Route path="/callback" render={(props) => {
+            /**
+             * props une fois connecté (dans la route callback) contient : 
+             * history: {length: 5, action: "REPLACE", location: {…}, createHref: ƒ, push: ƒ, …}
+             * location: {pathname: "/callback", search: "", hash: "#access_token=ETlKbiDLMSDHSCDhZ_yiyAkeKEwXdS73&exp…3pexZcAzliG1YXc4Lz2-jME0CmiKjhP2YjCsz90TGx9YA4ujQ", state: undefined}
+             * match: {path: "/callback", url: "/callback", isExact: true, params: {…}}
+             */
+
+            maFonction(props);
+            return <Callback {...props} />
+          }} />
+
+
         </React.Fragment>
       }
     </React.Fragment>
@@ -53,32 +82,32 @@ function RouterOutlet({ isAuthenticated, location: { pathname } }) {
 
 /* withAuthentication(RouterOutlet) = function (props) {
 
-      <ContextConsumer> // ContextConsumer emballe WrappedComponent
-        {
-          (context) => <WrappedComponent {...props} {...context} />    
-          
+        <ContextConsumer> // ContextConsumer emballe WrappedComponent
+          {
+            (context) => <WrappedComponent {...props} {...context} />
+
            // ... props = donnés par withRouter****** 
             history: {length: 2, action: "POP", location: {…}, createHref: ƒ, push: ƒ, …}
             location: {pathname: "/login", search: "", hash: "", state: undefined}
             match: {path: "/", url: "/", params: {…}, isExact: false}
 
-           // ... context = les valeurs transmises par le Provider (AuthenticationContext.Provider) 
-        }
+         // ... context = les valeurs transmises par le Provider (AuthenticationContext.Provider)
+      }
       </ContextConsumer>
-    }
+      }
 
-  ****** withRouter permet d'avoir accèsYou can get access to the history object’s properties and the closest <Route>'s match via the withRouter higher-order component. 
-  withRouter will pass updated match, location, and history props to the wrapped component 
-  whenever it renders.
-
-  withRouter(withAuthentication(RouterOutlet)) = withRouter emballe withAuthentication(RouterOutlet)
-  Faut l'imaginer comme 
-
+      ****** withRouter permet you can get access to the history object’s properties and the closest <Route>'s match via the withRouter higher-order component.
+      withRouter will pass updated match, location, and history props to the wrapped component
+      whenever it renders.
+    
+      withRouter(withAuthentication(RouterOutlet)) = withRouter emballe withAuthentication(RouterOutlet)
+      Faut l'imaginer comme
+    
   <WithRouter>
-    <AuthenticationConsumer>
-      <RouterOutlet/>
-    </AuthenticationConsumer>
-  </WithRouter>
+          <AuthenticationConsumer>
+            <RouterOutlet />
+          </AuthenticationConsumer>
+        </WithRouter>
 
- */
+        */
 export default withRouter(withAuthentication(RouterOutlet)); // en fait on le fait pour connaitre dans RouterOutlet sur quelle page on se trouve (pathname)
