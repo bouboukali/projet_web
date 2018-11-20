@@ -101,6 +101,7 @@ class LoginContainer extends React.Component {
                         password={password}
                         authenticate={this.authenticate}
                         onFieldChange={this.onFieldChange}
+                        login = {this.props.login2}
                     />
                 }
             </React.Fragment>

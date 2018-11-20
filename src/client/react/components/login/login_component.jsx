@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Form, Button, } from 'react-bootstrap';
 
 
-const LoginComponent = ({ email, password, authenticate, onFieldChange, }) => {
+const LoginComponent = ({ email, password, authenticate, onFieldChange, login }) => {
 
     return (
         <Container>
@@ -35,6 +35,7 @@ const LoginComponent = ({ email, password, authenticate, onFieldChange, }) => {
                         </Form.Group>
                     </Form>
                 </Col>
+                <Col> <Button type = "submit" onClick={login}> Auth0</Button></Col>
             </Row>
         </Container>
     );
