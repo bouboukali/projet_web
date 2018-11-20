@@ -16,6 +16,7 @@ export class Layout extends Component {
             <Row>
               <Col xs={2} />
               <Col xs={8}>
+
                 <RouterOutler />
               </Col>
               <Col xs={2} />
@@ -23,7 +24,7 @@ export class Layout extends Component {
           </Container>
 
           <Footer />
-          
+
         </React.Fragment>
       </div>
     )

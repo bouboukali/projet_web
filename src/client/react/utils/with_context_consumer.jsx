@@ -3,7 +3,10 @@ import React from "react";
 const withContextConsumer = ContextConsumer => (
   WrappedComponent => (
     props => (
+
       <ContextConsumer>
+
+
         {context => <WrappedComponent {...props} {...context} />}
       </ContextConsumer>
     )
@@ -11,3 +14,4 @@ const withContextConsumer = ContextConsumer => (
 )
 
 export default withContextConsumer;
+

@@ -1,5 +1,29 @@
 #!/usr/bin/env node
 
+/* Pourquoi une ligne de commande ? : https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e */
+
+// ce code est un squelette générable automatiquement par node js (voir doc express)
+
+/*
+app.js
+contains all the middleware(body-parser,morgan,etc) and routes.
+it exports app object at the last.
+
+www
+here it creates a httpServer and passes app as the handler
+var server = http.createServer(app);
+
+besides also sets the port server.listen(port);
+also sets the functions to be called if there is an error while starting the server: server.on('error', onError);
+Explanation so, basically it removes all the create and start server code from your app.js and let you focus only on the application logic part.
+Note: If you see in package.json file you would note this:
+
+"scripts": {
+  "start": "node ./bin/www"
+}
+this means if you type in terminal npm start then it will automatically start the ./bin/www file.
+*/
+
 /**
  * Read env variables
  */
@@ -19,31 +43,31 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3030');
+var port = normalizePort(process.env.PORT || '3030'); // dépend si on est en development ou pas
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = http.createServer(app); // Renvoie un objet http.Server
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+server.listen(port); // Starts the HTTP server listening for connections on the port
+server.on('error', onError); // quand on a l'évènement error, on lance la fonction callback onError
+server.on('listening', onListening); // quand on a l'évènement listening, on lance la fonction callback onListening
 
 /**
  * Normalize a port into a number, string, or false.
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  var port = parseInt(val, 10); // convertit la string val en base 10
 
-  if (isNaN(port)) {
+  if (isNaN(port)) { // si ce n'est pas un nombre
     // named pipe
     return val;
   }
@@ -61,7 +85,7 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
+  if (error.syscall !== 'listen') { // The error.syscall property is a string describing the syscall that failed.
     throw error;
   }
 

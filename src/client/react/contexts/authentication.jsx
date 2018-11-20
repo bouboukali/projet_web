@@ -5,10 +5,11 @@ import * as Session from 'react/services/session.js'
 import auth0 from 'auth0-js';
 
 const AuthenticationContext = React.createContext({
+
   jwt: null,
   isAuthenticated: false,
   login: () => { },
-  logout: () => { }
+  logout: () => { },
 });
 
 const AuthenticationConsumer = AuthenticationContext.Consumer;
@@ -17,19 +18,32 @@ const AuthenticationConsumer = AuthenticationContext.Consumer;
 
 class AuthenticationProvider extends React.Component {
 
+  /** this.props contient généralement les props donnés dans le composant :
+   *  ex : <MonComposant props1={name} props2={firstname}>
+   *           <Layout/>
+   *       </MonComposant>
+   * Si notre composant contient une balise enfant (Layout), props contiendra en + une clé children
+   * {
+   *    props1="sollami"
+   *    props2="florian"
+   *    children: {$$typeof: Symbol(react.element), type: ƒ, key: null, ref: null, props: {…}, …} 
+   *  }
+   */
+
 
   constructor(props) {
     super(props);
 
-    this.auth0 = new auth0.WebAuth({
+    const jwt = localStorage.getItem("JWT");
+
+    /*this.auth0 = new auth0.WebAuth({
       domain: process.env.AUTH0_DOMAIN,
       clientID: process.env.AUTH0_CLIENT_ID,
-      redirectUri: 'http://localhost:3000/callback',
-      responseType: 'token id_token',// rajouté nore token jwt si jme trompe ps
+      redirectUri: 'http://localhost:3030/callback',
+      responseType: jwt,// rajouté nore token jwt si jme trompe ps
       scope: 'openid'
-    });
+    });*/
 
-    const jwt = localStorage.getItem("JWT");
     const isAuthenticated = !!jwt;
 
     this.state = {
@@ -41,21 +55,18 @@ class AuthenticationProvider extends React.Component {
     this.logout = this.logout.bind(this);
   }
 
-  login2222 = () => {
-    this.auth0.authorize();
-  }
 
 
   login({ email, password }) {
-    return Session
-      .createSession(email, password)
-      .then(jwt => {
-        this.setState({
-          jwt: jwt,
-          isAuthenticated: !!jwt,
-        })
+
+    return Session.createSession(email, password).then(jwt => {
+      this.setState({
+        jwt: jwt,
+        isAuthenticated: !!jwt,
       })
+    })
   }
+
   logout() {
     Session.deleteSession();
 
@@ -68,14 +79,28 @@ class AuthenticationProvider extends React.Component {
   render() {
     const { login, logout } = this;
     const { jwt, isAuthenticated } = this.state;
-    const { children } = this.props;
+    const { children } = this.props; // correspond à <Layout/> !!!!!!!!
 
+
+    /* correspond aux valeurs qui seront accessibles par le ContextConsumer :
+    
+      function (props) {
+
+        <ContextConsumer>
+          {
+            (context) => <WrappedComponent {...props} {...context} />  <---- ...context = nos valeurs
+          }
+        </ContextConsumer>
+      }
+     */
     const providerValues = {
       jwt,
       isAuthenticated,
       login,
       logout,
     };
+
+
     return (
       <AuthenticationContext.Provider value={providerValues}>
         {children}
@@ -84,6 +109,41 @@ class AuthenticationProvider extends React.Component {
   }
 }
 
+/* const AuthenticationConsumer: React.ExoticComponent<React.ConsumerProps<{
+          jwt: any;
+          login: () => void;
+          logout: () => void;
+        }>>
+
+  const withAuthentication = ƒunction (WrappedComponent) {
+    
+    return function (props) {
+
+            <ContextConsumer>
+              {
+                (context) => <WrappedComponent {...props} {...context} />
+              }
+            </ContextConsumer>
+          }
+          }
+        
+          Après conversion en jsx :
+        
+  const withAuthentication = ƒunction (WrappedComponent) {
+    
+    return function (props) {
+
+      return _react2.default.createElement(ContextConsumer, null, function (context)
+        {
+          return _react2.default.createElement(WrappedComponent, _extends({}, props, context));
+        });
+    }
+  }
+
+*/
+// Quand commence par with... = appelé un composant de premier ordre (higher-order component : HOC).
+// Autrement dit, c’est une fonction qui accepte un composant et retourne un nouveau composant qui rend (render)
+// celui passé en paramètre. Ce nouveau composant est enrichi d'une fonctionnalité supplémentaire.
 const withAuthentication = withContextConsumer(AuthenticationConsumer);
 
 export {
