@@ -1,10 +1,11 @@
 import sendApiRequest from "react/utils/api";
+import history from '../services/history';
 
 function storeJWT(jwt) {
-    console.log(jwt)
+
     const serialized = JSON.stringify(jwt);
     localStorage.setItem("JWT", serialized);
-    console.log(localStorage.getItem("JWT"))
+
 }
 
 function retrieveJWT() {
@@ -14,6 +15,10 @@ function retrieveJWT() {
 
 function clearJWT() {
     localStorage.removeItem("JWT");
+    // Clear access token and ID token from local storage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
 }
 
 const createSession = (email, password) => {
@@ -43,6 +48,19 @@ const deleteSession = () => {
     clearJWT();
 };
 
+function setSession(authResult) {
+    // Set the time that the access token will expire at
+    let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('expires_at', expiresAt);
+
+}
+
+
+
+
+
 
 
 
@@ -50,4 +68,5 @@ export {
     createSession,
     deleteSession,
     retrieveJWT,
+    setSession
 };

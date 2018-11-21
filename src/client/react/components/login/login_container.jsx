@@ -86,9 +86,12 @@ class LoginContainer extends React.Component {
 
 
     render() {
+
+
         const { email, password, } = this.state;
         const { jwt, } = this.props;
-        const authenticated = !!jwt;
+        const authenticated = !!jwt; // !! transforme en boolean (jwt null = false, jwt pas null = true)
+
 
         return (
 
@@ -101,7 +104,7 @@ class LoginContainer extends React.Component {
                         password={password}
                         authenticate={this.authenticate}
                         onFieldChange={this.onFieldChange}
-                        login = {this.props.login2}
+                        login={this.props.login2}
                     />
                 }
             </React.Fragment>

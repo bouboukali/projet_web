@@ -8,10 +8,11 @@ import Footer from "./footer/footer";
 export class Layout extends Component {
   render() {
     return (
+      // A common pattern in React is for a component to return multiple elements.
+      // React.Fragment let you group a list of children without adding extra nodes to the DOM.
       <div>
         <React.Fragment>
           <Navigation />
-
           <Container>
             <Row>
               <Col xs={2} />

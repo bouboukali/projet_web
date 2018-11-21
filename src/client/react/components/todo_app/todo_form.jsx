@@ -18,7 +18,7 @@ const TodoForm = ({
         </Form.Text>
       </Form.Group>
 
-       <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit">
         Add #{nextPosition}
       </Button>
     </Form>

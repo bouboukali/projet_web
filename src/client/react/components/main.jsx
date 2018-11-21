@@ -1,9 +1,11 @@
 import React from "react";
-import { HashRouter } from "react-router-dom";
+import { HashRouter, Router } from "react-router-dom";
 
 import { AuthenticationProvider } from "react/contexts/authentication";
 import { ThemeProvider } from "react/contexts/theme";
 import Layout from "./layout";
+
+import history from '../services/history';
 
 function Main() {
   return (

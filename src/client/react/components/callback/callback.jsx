@@ -1,33 +1,23 @@
-import React, { Component } from 'react';
-import loading from './loading.svg';
+import React from 'react';
+import { withRouter } from 'react-router';
+import { withAuthentication } from 'react/contexts/authentication';
 
-class Callback extends Component {
+function Callback(props) {
 
-    constructor(props) {
-        super(props);
 
-        console.log(props)
-    }
-    render() {
-        const style = {
-            position: 'absolute',
-            display: 'flex',
-            justifyContent: 'center',
-            height: '100vh',
-            width: '100vw',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: 'white',
-        }
+    props.handleAuthentication().then(() => {
 
-        return (
-            <div style={style}>
-                <img src={loading} alt="loading" />
-            </div>
-        );
-    }
+        props.history.push('/');
+    })
+        .catch(err => {
+            props.history.push('/login');
+        });
+
+    return (
+        <div>
+            Loading user profile.
+    </div>
+    );
 }
 
-export default Callback;
+export default withRouter(withAuthentication(Callback));

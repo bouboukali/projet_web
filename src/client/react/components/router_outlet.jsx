@@ -15,14 +15,6 @@ import Callback from './callback/Callback';
 
 function RouterOutlet({ handleAuthentication, auth0, isAuthenticated, location }) {
 
-  const maFonction = ({ location }) => {
-    console.log(location)
-    if (/access_token|id_token|error/.test(location.hash)) {
-
-      handleAuthentication();
-    }
-  }
-
 
   const redirectToLogin = !isAuthenticated && location.pathname !== "/login";
 
@@ -43,6 +35,9 @@ function RouterOutlet({ handleAuthentication, auth0, isAuthenticated, location }
 
       {/*redirectToLogin && <Redirect to="/login" />*/}
       {/*!redirectToLogin && */
+
+        /* render={() => <HelloWorld/> ======= render={(props) => <HelloWorld {...props} */
+
         <React.Fragment>
           <Route exact path="/" render={() => <HelloWorld name="bob" />} />
           <Route path="/hello/:name" component={HelloFromParams} />
@@ -55,17 +50,14 @@ function RouterOutlet({ handleAuthentication, auth0, isAuthenticated, location }
 
 
 
-          <Route path="/callback" render={(props) => {
-            /**
-             * props une fois connecté (dans la route callback) contient : 
-             * history: {length: 5, action: "REPLACE", location: {…}, createHref: ƒ, push: ƒ, …}
-             * location: {pathname: "/callback", search: "", hash: "#access_token=ETlKbiDLMSDHSCDhZ_yiyAkeKEwXdS73&exp…3pexZcAzliG1YXc4Lz2-jME0CmiKjhP2YjCsz90TGx9YA4ujQ", state: undefined}
-             * match: {path: "/callback", url: "/callback", isExact: true, params: {…}}
-             */
 
-            maFonction(props);
-            return <Callback {...props} />
-          }} />
+
+          <Route exact path='/:access_token(access_token=.*)' render={(props) => (
+
+            <Callback {...props} />
+          )} />
+
+
 
 
         </React.Fragment>
