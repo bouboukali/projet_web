@@ -33,7 +33,7 @@ function RouterOutlet({ handleAuthentication, auth0, isAuthenticated, location }
 
     <React.Fragment>
 
-      {/*redirectToLogin && <Redirect to="/login" />*/}
+      {redirectToLogin && <Redirect to="/login" />}
       {/*!redirectToLogin && */
 
         /* render={() => <HelloWorld/> ======= render={(props) => <HelloWorld {...props} */

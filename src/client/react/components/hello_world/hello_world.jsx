@@ -7,7 +7,7 @@ class HelloWorld extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props.getProfile())
+    //console.log(props.getProfile())  --------------NAWFAL
   }
 
   render() {
