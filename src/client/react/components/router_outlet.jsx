@@ -15,8 +15,6 @@ import Callback from './callback/Callback';
 
 function RouterOutlet({ location, isAuthenticated }) {
 
-
-
   const redirectToLogin = !isAuthenticated() && location.pathname !== "/login";
 
   return (

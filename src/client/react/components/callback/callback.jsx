@@ -7,7 +7,7 @@ function Callback(props) {
 
     props.handleAuthentication().then(() => {
 
-        //props.history.push('/messages'); // ou replace
+        props.history.push('/messages'); // ou replace
     })
         .catch(err => {
             console.log("fdjjrhifr")
