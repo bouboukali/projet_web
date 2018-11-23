@@ -7,10 +7,11 @@ function Callback(props) {
 
     props.handleAuthentication().then(() => {
 
-        props.history.push('/');
+        //props.history.push('/messages'); // ou replace
     })
         .catch(err => {
-            props.history.push('/login');
+            console.log("fdjjrhifr")
+            // props.history.push('/login');
         });
 
     return (

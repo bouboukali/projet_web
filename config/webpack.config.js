@@ -133,7 +133,8 @@ function buildConfig(env, argv) {
         'process.env.AUTH0_CLIENT_ID': JSON.stringify(process.env.AUTH0_CLIENT_ID),
         'process.env.AUTH0_CLIENT_SECRET': JSON.stringify(process.env.AUTH0_CLIENT_SECRET),
         'process.env.AUTH0_DOMAIN': JSON.stringify(process.env.AUTH0_DOMAIN),
-        'process.env.CALLBACK_URL': JSON.stringify(process.env.CALLBACK_URL)
+        'process.env.CALLBACK_URL_DEVELOPMENT': JSON.stringify(process.env.CALLBACK_URL_DEVELOPMENT),
+        'process.env.CALLBACK_URL_PRODUCTION': JSON.stringify(process.env.CALLBACK_URL_PRODUCTION)
       })
     ]
   };

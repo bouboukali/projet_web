@@ -5,7 +5,7 @@ import { AuthenticationProvider } from "react/contexts/authentication";
 import { ThemeProvider } from "react/contexts/theme";
 import Layout from "./layout";
 
-import history from '../services/history';
+
 
 function Main() {
   return (

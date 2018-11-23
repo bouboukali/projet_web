@@ -13,11 +13,11 @@ import Callback from './callback/Callback';
 
 
 
-function RouterOutlet({ handleAuthentication, auth0, isAuthenticated, location }) {
+function RouterOutlet({ location, isAuthenticated }) {
 
 
-  const redirectToLogin = !isAuthenticated && location.pathname !== "/login";
 
+  const redirectToLogin = !isAuthenticated() && location.pathname !== "/login";
 
   return (
 
@@ -34,9 +34,16 @@ function RouterOutlet({ handleAuthentication, auth0, isAuthenticated, location }
     <React.Fragment>
 
       {redirectToLogin && <Redirect to="/login" />}
-      {/*!redirectToLogin && */
 
-        /* render={() => <HelloWorld/> ======= render={(props) => <HelloWorld {...props} */
+      {!redirectToLogin &&
+
+        /**
+         *  render={() => <Chat />
+        * =======
+      * render={(props) => <Chat {...props} 
+         * =======
+      * component={Chat}
+      * */
 
         <React.Fragment>
           <Route exact path="/" render={() => <HelloWorld name="bob" />} />
@@ -44,18 +51,8 @@ function RouterOutlet({ handleAuthentication, auth0, isAuthenticated, location }
           <Route path="/todo" component={TodoAppContainer} />
           <Route path="/messages" component={MessagesContainer} />
           <Route path="/message/:id" component={MessageContainer} />
-
-
           <Route path="/login" component={LoginContainer} />
-
-
-
-
-
-          <Route exact path='/:access_token(access_token=.*)' render={(props) => (
-
-            <Callback {...props} />
-          )} />
+          <Route exact path='/:access_token(access_token=.*)' component={Callback} />
 
 
 

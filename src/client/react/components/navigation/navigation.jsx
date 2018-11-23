@@ -8,6 +8,9 @@ import SearchForm from './search_form';
 
 
 const Navigation = ({ logout, theme }) => {
+
+
+
   return (
     <Navbar bg={theme} variant={theme}>
       <Navbar.Brand as={Link} to="/">Navbar</Navbar.Brand>
