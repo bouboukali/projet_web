@@ -3,6 +3,8 @@ import withContextConsumer from 'react/utils/with_context_consumer.jsx';
 import * as Session from 'react/services/session'
 import auth0 from 'auth0-js';
 import history from '../services/history';
+import { Auth0Lock } from 'auth0-lock';
+import { Auth0LockPasswordless } from 'auth0-lock';
 
 const AuthenticationContext = React.createContext({
 
@@ -46,6 +48,14 @@ class AuthenticationProvider extends React.Component {
       scope: 'openid profile'
     });
 
+    this.lock = new Auth0LockPasswordless(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN, {
+      allowedConnections: ['sms'],       
+      auth: {
+        redirectUrl: process.env.NODE_ENV === 'development' ? process.env.CALLBACK_URL_DEVELOPMENT : process.env.CALLBACK_URL_PRODUCTION,
+        responseType: 'token id_token'
+      }
+    });
+
     this.state = {
       auth0: this.auth0,
     };
@@ -58,7 +68,8 @@ class AuthenticationProvider extends React.Component {
   }
 
   login() {
-    this.auth0.authorize();
+    this.lock.show();
+    //this.auth0.authorize();
   }
 
   logout() {
@@ -104,6 +115,8 @@ class AuthenticationProvider extends React.Component {
   isAuthenticated() {
     // Check whether the current time is past the 
     // Access Token's expiry time
+
+   
 
     let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     return new Date().getTime() < expiresAt;
