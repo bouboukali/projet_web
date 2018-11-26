@@ -92,7 +92,7 @@ class LoginContainer extends React.Component {
         const { email, password, } = this.state;
         //const { isAuthenticated } = this.props;
         //console.log(this.props)
-        const { isAuthenticated } = this.props.auth;
+        //const { isAuthenticated } = this.props.auth;
 
 
 
@@ -103,8 +103,8 @@ class LoginContainer extends React.Component {
 
             <React.Fragment>
 
-                {auth0Client.isAuthenticated() && <Redirect to="/messages" />}
-                {!auth0Client.isAuthenticated() &&
+                {/*auth0Client.isAuthenticated() && <Redirect to="/messages" />*/}
+                {/*!auth0Client.isAuthenticated() &&*/
                     <LoginComponent
                         email={email}
                         password={password}

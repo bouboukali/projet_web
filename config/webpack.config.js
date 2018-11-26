@@ -121,7 +121,7 @@ function buildConfig(env, argv) {
 
       new Dotenv({
 
-        safe: true, // load '.env.example' to verify the '.env' variables are all set. Can also be a string to a different file.
+        safe: false, // load '.env.example' to verify the '.env' variables are all set. Can also be a string to a different file.
         systemvars: true, // load all the predefined 'process.env' variables which will trump anything local per dotenv specs.
         silent: true // hide any errors
       }),
@@ -135,7 +135,11 @@ function buildConfig(env, argv) {
         'process.env.AUTH0_CLIENT_SECRET': JSON.stringify(process.env.AUTH0_CLIENT_SECRET),
         'process.env.AUTH0_DOMAIN': JSON.stringify(process.env.AUTH0_DOMAIN),
         'process.env.CALLBACK_URL_DEVELOPMENT': JSON.stringify(process.env.CALLBACK_URL_DEVELOPMENT),
-        'process.env.CALLBACK_URL_PRODUCTION': JSON.stringify(process.env.CALLBACK_URL_PRODUCTION)
+        'process.env.CALLBACK_URL_PRODUCTION': JSON.stringify(process.env.CALLBACK_URL_PRODUCTION),
+        'process.env.LOGOUT_URL_DEVELOPMENT': JSON.stringify(process.env.LOGOUT_URL_DEVELOPMENT),
+        'process.env.LOGOUT_URL_PRODUCTION': JSON.stringify(process.env.LOGOUT_URL_PRODUCTION)
+
+
       })
     ]
   };

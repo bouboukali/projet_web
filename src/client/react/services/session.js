@@ -21,25 +21,20 @@ function clearJWT() {
     localStorage.removeItem('expires_at');
 }
 
-const createSession = (email, password) => {
+const createSession = (phone) => {
+    console.log("create")
+    console.log(phone)
     return sendApiRequest({
         url: "/api/sessions",
         method: "POST",
         params: {
-            email: email,
-            password: password
+            phone: phone
         }
     })
-        .then(data => {
-            console.log(data)
-            const jwt = data.jwt;
-            storeJWT(jwt);
-            return jwt;
+        .then(data => {//continuer
+            return data;
         })
         .catch(() => {
-            const jwt = "FAKE JWT";
-            storeJWT(jwt);
-            return jwt;
         })
 
 };

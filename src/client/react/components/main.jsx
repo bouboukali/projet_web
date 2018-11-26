@@ -1,11 +1,9 @@
 import React from "react";
-import { HashRouter, Router } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 
 import { AuthenticationProvider } from "react/contexts/authentication";
 import { ThemeProvider } from "react/contexts/theme";
 import Layout from "./layout";
-
-
 
 function Main() {
   return (

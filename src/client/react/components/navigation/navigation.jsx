@@ -9,17 +9,9 @@ import SearchForm from './search_form';
 import auth0Client from 'entries/Auth';
 
 
-
-
-const Navigation = (props) => {
-
-  const signOut = () => {
-    auth0Client.signOut();
-    props.history.replace('/');
-  };
-
+const Navigation = ({ logout, theme }) => {
   return (
-    <Navbar bg={props.theme} variant={props.theme}>
+    <Navbar bg={theme} variant={theme}>
       <Navbar.Brand as={Link} to="/">Navbar</Navbar.Brand>
       <Nav className="mr-auto">
         <Nav.Link as={Link} to="/" >Hello</Nav.Link>

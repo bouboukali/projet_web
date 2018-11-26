@@ -2,13 +2,13 @@ import React from 'react';
 import { Container, Row, Col, Form, Button, } from 'react-bootstrap';
 
 
-const LoginComponent = ({ email, password, authenticate, onFieldChange, login }) => {
+const CallbackComponent = ({ email, name, phone, inscription, onFieldChange }) => {
 
     return (
         <Container>
             <Row>
                 <Col xs={{ span: 8, offset: 2 }} style={{ marginTop: "200px" }}>
-                    <Form onSubmit={authenticate}>
+                    <Form onSubmit={inscription}>
                         <Form.Group as={Row} controlId="formHorizontalEmail">
                             <Form.Label column sm={2}>
                                 Email
@@ -19,26 +19,34 @@ const LoginComponent = ({ email, password, authenticate, onFieldChange, login })
                             </Col>
                         </Form.Group>
 
-                        <Form.Group as={Row} controlId="formHorizontalPassword">
+                        <Form.Group as={Row} controlId="formHorizontalName">
                             <Form.Label column sm={2}>
-                                Password
+                                Nom
                             </Form.Label>
                             <Col sm={10}>
-                                <Form.Control name="password" type="password" placeholder="Password" value={password} onChange={onFieldChange} />
+                                <Form.Control name="name" type="text" placeholder="Nom" value={name} onChange={onFieldChange} />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} controlId="formHorizontalPhone">
+                            <Form.Label column sm={2}>
+                                GSM
+                            </Form.Label>
+                            <Col sm={10}>
+
+                                <Form.Control name="phone" type="tel" placeholder="GSM" value={phone} onChange={onFieldChange} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Col sm={{ span: 10, offset: 2 }}>
-                                <Button type="submit">Sign in</Button>
+                                <Button type="submit">S'inscrire</Button>
                             </Col>
                         </Form.Group>
                     </Form>
                 </Col>
-                <Col> <Button type="submit" onClick={login}> Auth0</Button></Col>
             </Row>
         </Container>
     );
 };
 
-export default LoginComponent;
+export default CallbackComponent;
