@@ -107,6 +107,8 @@ class Auth extends EventEmitter {
 
             this.lock.checkSession({}, (err, authResult) => {
 
+                console.log(err)
+
                 if (err)
                     return reject(err);
 

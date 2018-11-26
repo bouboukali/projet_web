@@ -42,10 +42,7 @@ class CallbackContainer extends Component {
 
         event.preventDefault();
 
-        console.log(auth0Client.getIdToken())
-
         const { email, name, firstname, phone } = this.state;
-        console.log(this.state)
 
         await axios.post('/api/test/', {
 

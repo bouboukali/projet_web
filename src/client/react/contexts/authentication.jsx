@@ -2,11 +2,14 @@ import React from 'react';
 import withContextConsumer from 'react/utils/with_context_consumer.jsx';
 import * as Session from 'react/services/session.js'
 
+import auth0Client from 'entries/Auth';
+
 const AuthenticationContext = React.createContext({
   jwt: null,
   isAuthenticated: false,
-  login: () => {},
-  logout: () => {}
+  auth: null,
+  login: () => { },
+  logout: () => { }
 });
 
 const AuthenticationConsumer = AuthenticationContext.Consumer;
@@ -21,16 +24,17 @@ class AuthenticationProvider extends React.Component {
     this.state = {
       jwt,
       isAuthenticated,
+      auth0Client
     };
 
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
   }
-  
+
   login({ email, password }) {
     return Session
       .createSession(email, password)
-      .then( jwt => {
+      .then(jwt => {
         this.setState({
           jwt: jwt,
           isAuthenticated: !!jwt,
@@ -41,19 +45,20 @@ class AuthenticationProvider extends React.Component {
     Session.deleteSession();
 
     this.setState({
-          jwt: null,
-          isAuthenticated: false,
+      jwt: null,
+      isAuthenticated: false,
     });
   }
 
   render() {
     const { login, logout } = this;
-    const { jwt, isAuthenticated } = this.state;
+    const { jwt, isAuthenticated, auth } = this.state;
     const { children } = this.props;
 
     const providerValues = {
       jwt,
       isAuthenticated,
+      auth,
       login,
       logout,
     };
@@ -67,7 +72,7 @@ class AuthenticationProvider extends React.Component {
 
 const withAuthentication = withContextConsumer(AuthenticationConsumer);
 
-export { 
+export {
   AuthenticationConsumer,
   AuthenticationProvider,
   withAuthentication,

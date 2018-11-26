@@ -39,6 +39,7 @@ class RouterOutlet extends Component {
       this.forceUpdate();
 
     } catch (err) {
+      console.log(err)
 
       if (err.error !== 'login_required')
         console.log(err.error);
@@ -60,12 +61,11 @@ class RouterOutlet extends Component {
 
 
 
-            <SecuredRoute path='/todo'
-              component={TodoAppContainer}
-              checkingSession={this.state.checkingSession} />
 
-
+            <Route path="/todo" component={TodoAppContainer} />
             <Route path="/messages" component={MessagesContainer} />
+
+
             <Route path="/message/:id" component={MessageContainer} />
             <Route path="/login" component={LoginContainer} />
             <Route path='/:access_token(access_token=.*)' render={(props) => {
