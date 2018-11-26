@@ -2,6 +2,11 @@ var express = require('express');
 var router = express.Router();
 const db = require('../modules/db.js');
 
+var jwt = require('express-jwt');
+var jwks = require('jwks-rsa');
+
+
+
 router.get('/', function (req, res, next) {
   db.db.collection('messages').find().toArray().then((messages) => {
     res.json(messages);

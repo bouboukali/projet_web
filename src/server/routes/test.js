@@ -26,14 +26,15 @@ router.post('/', jwtCheck, (req, res) => {
 
     console.log(req.body)
 
-    db.db.collection('users').insertOne(req.body).then((result) => {
 
-        req.body._id = result.insertedId; // si on avait pas de req.body._id valide, alors il sera créé 
-        res.json(req.body);
-
-    }).catch((err) => {
-        res.status(500).send(err);
-    });
+    /* db.db.collection('users').insertOne(req.body).then((result) => {
+ 
+         req.body._id = result.insertedId; // si on avait pas de req.body._id valide, alors il sera créé 
+         res.json(req.body);
+ 
+     }).catch((err) => {
+         res.status(500).send(err);
+     });*/
 
 
 });

@@ -1,8 +1,9 @@
 import React from "react";
 import MessagesComponent from "./messages_component";
 import sendApiRequest from "react/utils/api";
-
+import axios from 'axios';
 class MessagesContainer extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = { messages: [] };
@@ -11,29 +12,24 @@ class MessagesContainer extends React.Component {
   }
 
 
-  fetchMessages(){
-    sendApiRequest({ url: "/api/messages" })
-      .then((messages) => {
-        this.setState({
-          messages: messages,
-        })
-      })
-      .catch((error) => {
-        console.error(error);
-        this.setState({
-          messages: [],
-        })
-      })
+  async fetchMessages() {
+
+    const messages = (await axios.get('/api/messages')).data;
+    this.setState({
+      messages,
+    });
   }
 
-  deleteMessage(message){
+  deleteMessage(message) {
+
     const url = `/api/messages/${message._id}`
+
     sendApiRequest({
-        url,
-        method: "DELETE",
-      })
+      url,
+      method: "DELETE",
+    })
       .then((_ignored) => {
-        const {messages} = this.state;
+        const { messages } = this.state;
 
         const messageIndex = messages.indexOf(message);
         if (messageIndex > -1) {
@@ -51,11 +47,11 @@ class MessagesContainer extends React.Component {
       })
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.fetchMessages()
   }
 
-  
+
   render() {
     return (
       <MessagesComponent
