@@ -22,19 +22,15 @@ const jwtCheck = jwt({
 
 // insert a new question
 router.post('/', jwtCheck, (req, res) => {
-    console.log("tamer")
 
-    console.log(req.body)
+    db.db.collection('users').insertOne(req.body).then((result) => {
 
+        req.body._id = result.insertedId; // si on avait pas de req.body._id valide, alors il sera créé 
+        res.json(req.body);
 
-    /* db.db.collection('users').insertOne(req.body).then((result) => {
- 
-         req.body._id = result.insertedId; // si on avait pas de req.body._id valide, alors il sera créé 
-         res.json(req.body);
- 
-     }).catch((err) => {
-         res.status(500).send(err);
-     });*/
+    }).catch((err) => {
+        res.status(500).send(err);
+    });
 
 
 });

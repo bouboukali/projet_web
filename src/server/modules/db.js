@@ -22,8 +22,8 @@ const dbName = process.env.DB_DB;
  */
 let connect = () => {
     return new Promise((resolve, reject) => {
-        const client = new MongoClient(url);
-        client.connect(function(err) {
+        const client = new MongoClient(url, { useNewUrlParser: true });
+        client.connect(function (err) {
             if (err) {
                 console.log("[DB] Unable to connect to server: " + err.message);
                 reject(err);
