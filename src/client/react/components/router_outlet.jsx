@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Redirect, withRouter } from "react-router-dom";
+import React, { Component } from 'react';
+import { Route, Redirect, Switch, withRouter } from "react-router-dom";
 
 import { withAuthentication } from "react/contexts/authentication";
 import HelloWorld from "./hello_world/hello_world";
@@ -11,55 +11,93 @@ import LoginContainer from "./login/login_container";
 
 import Callback from './callback/Callback';
 
+import auth0Client from 'entries/Auth';
 
+class RouterOutlet extends Component {
 
-function RouterOutlet({ location, isAuthenticated }) {
+  constructor(props) {
+    super(props);
 
-  const redirectToLogin = !isAuthenticated() && location.pathname !== "/login";
+    this.state = {
+      checkingSession: true,
+    }
+  }
 
-  return (
+  test() {
+    auth0Client.handleAuthentication();
+  }
 
-    /**
-     * Quand on lance le site : http://localhost:3030/ on est pas connecté et on est pas sur le path /login, 
-     * donc redirectToLogin = true --> redirection vers http://localhost:3030/login,
-     * 
-     * 
-     * En faisant cette redirection, le composant RouterOutlet est de nouveau render, 
-     * on est pas connecté et on est  sur le path /login, donc redirectToLogin = false, donc on a accès à
-     * toutes les routes et le composant de la route /login est render
-     */
-
-    <React.Fragment>
-
-      {redirectToLogin && <Redirect to="/login" />}
-
-      {!redirectToLogin &&
-
-        /**
-         *  render={() => <Chat />
-        * =======
-      * render={(props) => <Chat {...props} 
-         * =======
-      * component={Chat}
-      * */
-
-        <React.Fragment>
-          <Route exact path="/" render={() => <HelloWorld name="bob" />} />
-          <Route path="/hello/:name" component={HelloFromParams} />
-          <Route path="/todo" component={TodoAppContainer} />
-          <Route path="/messages" component={MessagesContainer} />
-          <Route path="/message/:id" component={MessageContainer} />
-          <Route path="/login" component={LoginContainer} />
-          <Route exact path='/:access_token(access_token=.*)' component={Callback} />
+  render() {
+    const redirectToLogin = !auth0Client.isAuthenticated() && location.pathname !== "/login";
 
 
 
 
-        </React.Fragment>
-      }
-    </React.Fragment>
-  );
+    return (
+      <React.Fragment>
+
+        {/*redirectToLogin && <Redirect to="/login" />*/}
+
+        {/*!redirectToLogin &&*/
+
+
+
+          /**
+           *  render={() => <Chat />
+          * =======
+        * render={(props) => <Chat {...props} 
+           * =======
+        * component={Chat}
+        * */
+
+          <React.Fragment >
+
+
+            <Route exact path="/" render={() => <HelloWorld name="bob" />} />
+            <Route exact path="/hello/:name" component={HelloFromParams} />
+
+            <Route exact path="/todo" component={TodoAppContainer} />
+
+            <Route exact path="/messages" component={MessagesContainer} />
+            <Route exact path="/message/:id" component={MessageContainer} />
+
+            <Route exact path="/login" component={LoginContainer} />
+
+            <Route exact path='/:access_token(access_token=.*)' render={(props) => {
+
+
+
+              return <Callback {...props} />
+            }} />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </React.Fragment>
+        }
+      </React.Fragment>
+    );
+  }
+
+
+
+
+
+
+
 }
+
 
 
 

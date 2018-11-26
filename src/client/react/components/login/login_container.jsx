@@ -4,6 +4,8 @@ import { Redirect } from 'react-router-dom';
 import { withAuthentication } from 'react/contexts/authentication';
 import LoginComponent from './login_component';
 
+
+import auth0Client from 'entries/Auth';
 /**
  * props contient : 
  * 
@@ -88,22 +90,27 @@ class LoginContainer extends React.Component {
     render() {
 
         const { email, password, } = this.state;
-        const { isAuthenticated } = this.props;
+        //const { isAuthenticated } = this.props;
+        //console.log(this.props)
+        const { isAuthenticated } = this.props.auth;
 
+
+
+        //console.log(this.props)
 
 
         return (
 
             <React.Fragment>
 
-                {isAuthenticated() && <Redirect to="/messages" />}
-                {!isAuthenticated() &&
+                {auth0Client.isAuthenticated() && <Redirect to="/messages" />}
+                {!auth0Client.isAuthenticated() &&
                     <LoginComponent
                         email={email}
                         password={password}
                         authenticate={this.authenticate}
                         onFieldChange={this.onFieldChange}
-                        login={this.props.login}
+                        login={auth0Client.signIn}
                     >
                         {/*this.props.login()*/}
                     </LoginComponent>

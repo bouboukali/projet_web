@@ -1,24 +1,48 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { withAuthentication } from 'react/contexts/authentication';
 
-function Callback(props) {
+
+import auth0Client from 'entries/Auth';
 
 
-    props.handleAuthentication().then(() => {
+class Callback extends Component {
 
-        props.history.push('/messages'); // ou replace
-    })
-        .catch(err => {
-            console.log("fdjjrhifr")
-            // props.history.push('/login');
-        });
 
-    return (
-        <div>
-            Loading user profile.
-    </div>
-    );
+    async componentDidMount() {
+        await auth0Client.handleAuthentication();
+
+        //this.props.history.replace('/');
+    }
+    render() {
+
+        return (
+            <div>
+                Loading user profile.
+        </div>
+        );
+    }
+
 }
+
+
+
+
+
+//console.log(props.auth.isAuthenticated())
+
+
+
+/*props.handleAuthentication().then(() => {
+
+    //props.history.push('/messages'); // ou replace
+})
+    .catch(err => {
+        console.log("fdjjrhifr")
+        // props.history.push('/login');
+    });*/
+
+
+
 
 export default withRouter(withAuthentication(Callback));

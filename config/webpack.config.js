@@ -22,7 +22,7 @@ function buildConfig(env, argv) {
     *  }
     */
     entry: {
-      application: './src/client/entries/application.js',
+      application: ['babel-polyfill', './src/client/entries/application.js'],
       auth0: './node_modules/auth0-js/build/auth0.js',
       auht0_lock: './node_modules/auth0-lock/lib/lock.js'
     },

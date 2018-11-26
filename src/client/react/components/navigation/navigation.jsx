@@ -6,13 +6,20 @@ import { withAuthentication } from 'react/contexts/authentication';
 import { withTheme } from 'react/contexts/theme';
 import SearchForm from './search_form';
 
+import auth0Client from 'entries/Auth';
 
-const Navigation = ({ logout, theme }) => {
 
 
+
+const Navigation = (props) => {
+
+  const signOut = () => {
+    auth0Client.signOut();
+    props.history.replace('/');
+  };
 
   return (
-    <Navbar bg={theme} variant={theme}>
+    <Navbar bg={props.theme} variant={props.theme}>
       <Navbar.Brand as={Link} to="/">Navbar</Navbar.Brand>
       <Nav className="mr-auto">
         <Nav.Link as={Link} to="/" >Hello</Nav.Link>
@@ -21,7 +28,7 @@ const Navigation = ({ logout, theme }) => {
         <Nav.Link as={Link} to="/login" >Login</Nav.Link>
       </Nav>
       <SearchForm />
-      <Button variant="outline-warning" onClick={logout}>Logout</Button>
+      <Button variant="outline-warning" onClick={auth0Client.signOut}>Logout</Button>
     </Navbar>
   );
 }

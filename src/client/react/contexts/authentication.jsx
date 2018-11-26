@@ -1,19 +1,13 @@
 import React from 'react';
 import withContextConsumer from 'react/utils/with_context_consumer.jsx';
-import * as Session from 'react/services/session'
-import auth0 from 'auth0-js';
 import history from '../services/history';
-import { Auth0Lock } from 'auth0-lock';
-import { Auth0LockPasswordless } from 'auth0-lock';
+import Auth from 'entries/Auth.js';
+
+
 
 const AuthenticationContext = React.createContext({
 
-  auth0: null,
-  login: () => { },
-  logout: () => { },
-  handleAuthentication: () => { },
-  isAuthenticated: () => { },
-  getProfile: () => { }
+  auth: null,
 
 
 });
@@ -40,113 +34,18 @@ class AuthenticationProvider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.auth0 = new auth0.WebAuth({
-      domain: process.env.AUTH0_DOMAIN,
-      clientID: process.env.AUTH0_CLIENT_ID,
-      redirectUri: process.env.NODE_ENV === 'development' ? process.env.CALLBACK_URL_DEVELOPMENT : process.env.CALLBACK_URL_PRODUCTION,
-      responseType: 'token id_token',
-      scope: 'openid profile'
-    });
-
-    this.lock = new Auth0LockPasswordless(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN, {
-      allowedConnections: ['sms'],       
-      auth: {
-        redirectUrl: process.env.NODE_ENV === 'development' ? process.env.CALLBACK_URL_DEVELOPMENT : process.env.CALLBACK_URL_PRODUCTION,
-        responseType: 'token id_token'
-      }
-    });
-
+    //const auth = new Auth(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN);
     this.state = {
-      auth0: this.auth0,
+      auth: Auth,
     };
 
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
-    this.handleAuthentication = this.handleAuthentication.bind(this);
-    this.isAuthenticated = this.isAuthenticated.bind(this);
-    this.getProfile = this.getProfile.bind(this);
   }
 
-  login() {
-    this.lock.show();
-    //this.auth0.authorize();
-  }
 
-  logout() {
-    // Clear Access Token and ID Token from local storage
-    console.log(this.isAuthenticated())
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
-
-    console.log(this.isAuthenticated())
-    // navigate to the home route
-    history.replace('/');
-  }
-
-  handleAuthentication() {
-
-    return new Promise((resolve, reject) => {
-
-      this.auth0.parseHash((err, authResult) => {
-
-        //console.log(authResult)
-
-        if (err) {
-          console.log("hujhudhuehduhehedue")
-          return reject(err);
-        }
-
-        // console.log(authResult);
-
-        if (!authResult || !authResult.idToken) {
-          return reject(err);
-        }
-
-        Session.setSession(authResult);
-        //history.replace('/messages');
-
-        resolve();
-      });
-    })
-  }
-
-  // pas expiré = authentifié
-  isAuthenticated() {
-    // Check whether the current time is past the 
-    // Access Token's expiry time
-
-   
-
-    let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    return new Date().getTime() < expiresAt;
-  }
-
-  getProfile() {
-
-    if (!this.state.userProfile) {
-
-      var accessToken = localStorage.getItem('access_token');
-
-      if (!accessToken)
-        console.log('Access Token must exist to fetch profile');
-
-      this.auth0.client.userInfo(accessToken, function (err, profile) {
-
-        if (profile) {
-          this.setState({ userProfile: profile }) // comme on est dans une fonction on perd le this
-          return this.state.userProfile;
-        }
-      });
-
-    } else {
-      return this.state.userProfile;
-    }
-  }
   render() {
 
-    const { auth0 } = this.state;
-    const { login, logout, handleAuthentication, isAuthenticated, getProfile } = this;
+    const { auth } = this.state;
+    //const { login, logout, handleAuthentication, isAuthenticated, getProfile } = this;
     const { children } = this.props; // correspond à <Layout/> !!!!!!!!
 
 
@@ -162,12 +61,7 @@ class AuthenticationProvider extends React.Component {
       }
      */
     const providerValues = {
-      auth0,
-      login,
-      logout,
-      handleAuthentication,
-      isAuthenticated,
-      getProfile
+      auth
     };
 
     return (

@@ -16,6 +16,7 @@ const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
 const sessionsRouter = require('./routes/sessions');
 
+const jwtSecret = process.env.JWT_SECRET;
 // __dirname = // C:\Users\Florian\OneDrive - Haute Ecole Léonard de Vinci\IPL\3BIN flo\Web 3\react udemy final\src\server
 const projectRoot = path.join(__dirname, '../..');
 const serverRoot = path.join(__dirname, '.');
