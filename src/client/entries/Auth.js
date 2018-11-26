@@ -1,5 +1,6 @@
 import { Auth0LockPasswordless } from 'auth0-lock';
-import { EventEmitter } from 'events'
+import { EventEmitter } from 'events';
+import axios from 'axios';
 
 class Auth extends EventEmitter {
     constructor(clientId, domain) {
@@ -16,12 +17,32 @@ class Auth extends EventEmitter {
         });
 
 
-
+        this.getUser = this.getUser.bind(this);
         this.getProfile = this.getProfile.bind(this);
         this.handleAuthentication = this.handleAuthentication.bind(this);
         this.isAuthenticated = this.isAuthenticated.bind(this);
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
+    }
+    getUser(){
+
+       return new Promise((resolve,reject) =>{
+        axios.post('/api/callbacks/session', {
+            phone: this.profile.nickname,
+        }, {
+                headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
+            })
+
+            .then((user) => {  
+                console.log(user)             
+                    resolve(user.data);
+            })
+            .catch((error) => {
+                reject(error);
+
+            });
+       }) 
+        //return this.user;
     }
 
     getProfile() {
@@ -99,6 +120,7 @@ class Auth extends EventEmitter {
         this.lock.logout({
             returnTo: process.env.NODE_ENV === 'development' ? process.env.LOGOUT_URL_DEVELOPMENT : process.env.LOGOUT_URL_PRODUCTION
         });
+        localStorage.removeItem("name");
     }
 
     silentAuth() {

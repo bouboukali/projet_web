@@ -2,12 +2,11 @@ var express = require('express');
 var router = express.Router();
 const db = require('../modules/db.js');
 
-var jwt = require('express-jwt');
-var jwks = require('jwks-rsa');
+const jwtCheck = require('../modules/jwt.js');
 
 
 
-router.get('/', function (req, res, next) {
+router.get('/',jwtCheck.jwtCheck, function (req, res, next) {
   db.db.collection('messages').find().toArray().then((messages) => {
     res.json(messages);
   }).catch((err) => {
@@ -15,7 +14,7 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.get('/:id', function (req, res, next) {
+router.get('/:id',  function (req, res, next) {
 
   db.db.collection('messages').findOne({ _id: new db.ObjectID(req.params.id) }).then((message) => {
     res.json(message);

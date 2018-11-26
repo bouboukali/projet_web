@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import auth0Client from 'entries/Auth';
 import sendApiRequest from "react/utils/api";
 import CallbackComponent from './callback_component';
+import history from 'react/services/history';
 
 import axios from 'axios';
 
@@ -22,7 +23,6 @@ class CallbackContainer extends Component {
             email: "",
             name: "",
             firstname: "",
-            phone: "",
             user: null,
         };
 
@@ -33,8 +33,26 @@ class CallbackContainer extends Component {
 
     async componentDidMount() {
         await auth0Client.handleAuthentication();
-        console.log(auth0Client.isAuthenticated());
-        //this.props.history.replace('/');
+        console.log(auth0Client.getProfile());
+        //this.user =
+        auth0Client.getUser().then(user => {
+            console.log(user);
+            this.setState({
+                user : user
+            })
+
+            
+            localStorage.setItem('name', user.firstname + " " + user.name);
+        }).catch(err =>{
+            console.log(err)
+            
+        })
+        console.log(this.state.user)
+        if(this.state.user!=null)
+        history.replace('/messages');
+        
+        /*if(auth0Client.getUser() != null) // on a récupéré un utilisateur -> on peut aller sur messages
+            history.replace('/messages');*/
     }
 
 
@@ -42,14 +60,14 @@ class CallbackContainer extends Component {
 
         event.preventDefault();
 
-        const { email, name, firstname, phone } = this.state;
+        const { email, name, firstname } = this.state;
 
-        await axios.post('/api/test/', {
+        await axios.post('/api/callbacks/', {
 
             email: email,
             name: name,
             firstname: firstname,
-            phone: phone,
+            phone: auth0Client.getProfile().nickname,
         }, {
                 headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
             })
@@ -57,8 +75,10 @@ class CallbackContainer extends Component {
             .then((user) => {
                 console.log(user);
                 this.setState({
-                    user: user,
+                    user: user.data,
                 })
+                console.log(user)
+                localStorage.setItem('name', this.state.user.firstname + " " + this.state.user.name);
             })
             .catch((error) => {
                 console.error(error);

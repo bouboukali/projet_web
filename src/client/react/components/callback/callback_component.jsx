@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Form, Button, } from 'react-bootstrap';
 
 
-const CallbackComponent = ({ email, name, phone, inscription, onFieldChange }) => {
+const CallbackComponent = ({ email, name, firstname, inscription, onFieldChange }) => {
 
     return (
         <Container>
@@ -27,15 +27,15 @@ const CallbackComponent = ({ email, name, phone, inscription, onFieldChange }) =
                                 <Form.Control name="name" type="text" placeholder="Nom" value={name} onChange={onFieldChange} />
                             </Col>
                         </Form.Group>
-                        <Form.Group as={Row} controlId="formHorizontalPhone">
+                        <Form.Group as={Row} controlId="formHorizontalFirstName">
                             <Form.Label column sm={2}>
-                                GSM
+                                Prénom
                             </Form.Label>
                             <Col sm={10}>
-
-                                <Form.Control name="phone" type="tel" placeholder="GSM" value={phone} onChange={onFieldChange} />
+                                <Form.Control name="firstname" type="text" placeholder="Prénom" value={firstname} onChange={onFieldChange} />
                             </Col>
                         </Form.Group>
+                
 
                         <Form.Group as={Row}>
                             <Col sm={{ span: 10, offset: 2 }}>

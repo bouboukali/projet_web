@@ -16,7 +16,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const messagesRouter = require('./routes/messages');
 const sessionsRouter = require('./routes/sessions');
-const testRouter = require('./routes/test');
+const callbacksRouter = require('./routes/callbacks');
 
 const bodyParser = require('body-parser');
 
@@ -94,7 +94,7 @@ app.use('/', indexRouter);
 //app.use(authMiddleware);
 app.use('/api/users', usersRouter);
 app.use('/api/messages', messagesRouter);
-app.use('/api/test', testRouter);
+app.use('/api/callbacks', callbacksRouter);
 
 
 

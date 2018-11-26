@@ -2,6 +2,7 @@ import React from "react";
 import MessagesComponent from "./messages_component";
 import sendApiRequest from "react/utils/api";
 import axios from 'axios';
+import auth0Client from 'entries/Auth';
 class MessagesContainer extends React.Component {
 
   constructor(props) {
@@ -14,7 +15,9 @@ class MessagesContainer extends React.Component {
 
   async fetchMessages() {
 
-    const messages = (await axios.get('/api/messages')).data;
+    const messages = (await axios.get('/api/messages', {
+      headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
+  })).data;
     this.setState({
       messages,
     });

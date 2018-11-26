@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Redirect, withRouter } from "react-router-dom";
 
 import { withAuthentication } from "react/contexts/authentication";
-import HelloWorld from "./hello_world/hello_world";
+import HelloWorldFunctional from "./hello_world/hello_world_functional";
 import HelloFromParams from "./hello_world/hello_from_params";
 import TodoAppContainer from "./todo_app/todo_app_container";
 import MessagesContainer from "./messages/messages_container";
@@ -49,14 +49,19 @@ class RouterOutlet extends Component {
   }
 
   render() {
+    const name =localStorage.getItem('name');
+    /*if(name == undefined){
+      name = "Bob";
+    }*/
     return (
 
-      //const redirectToLogin = !auth0Client.isAuthenticated() && pathname !== "/login";
+      
       <React.Fragment>
         {/*redirectToLogin && <Redirect to="/login" />}
         {!redirectToLogin &&*/
+
           <React.Fragment>
-            <Route exact path="/" render={() => <HelloWorld name="bob" />} />
+            <Route exact path="/" render={() => <HelloWorldFunctional name={name} />} />
             <Route path="/hello/:name" component={HelloFromParams} />
 
 
