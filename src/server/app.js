@@ -84,6 +84,47 @@ app.use('/api/users', usersRouter); // sur le chemin /users appelle le callback 
 app.use('/api/messages', messagesRouter);
 app.use('/api/sessions', sessionsRouter);
 
+
+
+const db = require('../modules/db.js');
+const jwt = require('jsonwebtoken');
+
+router.post('/', function (req, res, next) {
+
+
+    if (!req.body.email || !req.body.password) {
+        res.status(400).send("You ned an email and a password");
+        return;
+    }
+
+
+    db.db.collection('users').findOne({ email: req.body.email, password: req.body.password })
+        .then((message) => {
+
+            const token = jwt.sign({
+                id: message._id,
+                login: message.login
+
+
+            }, "mysupersecretkey", { expiresIn: "3 hours" });
+
+            const c = {
+                jwt: token
+            };
+            res.json(c);
+            //console.log(message)
+            // res.json(message);
+        }).catch((err) => {
+            res.status(500).send(err);
+        });
+});
+
+
+
+
+
+
+
 /* Si les fonctions middlewares (function(req, res, next) de la méthode HTTP get) des callbacks indexRouter et usersRouter ne terminent pas 
  * le cycle de demande-réponse, alors elles appellent la fonction next() pour transmettre le contrôle à la fonction middleware suivante.
 */
