@@ -31,40 +31,40 @@ class Auth extends EventEmitter {
     getUser(){
         console.log(this.getType())
         if(this.getType()=='sms'){  
-       return new Promise((resolve,reject) =>{
-        axios.post('/api/callbacks/session', {
-            phone: this.profile.nickname,
-        }, {
-                headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
-            })
+            return new Promise((resolve,reject) =>{
+                axios.post('/api/callbacks/session', {
+                    phone: this.profile.nickname,
+                }, {
+                        headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
+                    })
 
-            .then((user) => {  
-                console.log(user)             
-                    resolve(user.data);
-            })
-            .catch((error) => {
-                reject(error);
+                    .then((user) => {  
+                        console.log(user)             
+                            resolve(user.data);
+                    })
+                    .catch((error) => {
+                        reject(error);
 
-            });
-       })
-    }else{
-        console.log(this.profile.name)
-        return new Promise((resolve,reject) =>{
-            axios.post('/api/callbacks/sessionEmail', {
-                email: this.profile.name,
-            }, {
-                    headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
-                })
-    
-                .then((user) => {  
-                    console.log(user)             
-                        resolve(user.data);
-                })
-                .catch((error) => {
-                    reject(error);
-    
-                });
-           })
+                    });
+            })
+        }else{
+            console.log(this.profile.name)
+            return new Promise((resolve,reject) =>{
+                axios.post('/api/callbacks/sessionEmail', {
+                    email: this.profile.name,
+                }, {
+                        headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
+                    })
+        
+                    .then((user) => {  
+                        console.log(user)             
+                            resolve(user.data);
+                    })
+                    .catch((error) => {
+                        reject(error);
+        
+                    });
+            })
         } 
     }
 
@@ -87,18 +87,15 @@ class Auth extends EventEmitter {
             allowedConnections: ['sms'],
            
         };
-        //this.type=1;
         
         this.lock.show(options);
     }
     signIn2() {
-        //this.type=2;
         const  options = {
             allowedConnections: ['email'],
             passwordlessMethod: 'code',
             
         };
-        //this.auth0.authorize();
         this.lock.show(options);
     }
 
@@ -130,11 +127,9 @@ class Auth extends EventEmitter {
         // set the time that the id token will expire at
         this.expiresAt = authResult.idTokenPayload.exp * 1000;
 
-        //console.log(this.isAuthenticated())
     }
 
     signOut() {
-    //if(this.type==1){
 
         this.lock.logout({
             returnTo: process.env.NODE_ENV === 'development' ? process.env.LOGOUT_URL_DEVELOPMENT : process.env.LOGOUT_URL_PRODUCTION
