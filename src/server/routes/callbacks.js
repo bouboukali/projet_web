@@ -30,5 +30,16 @@ router.post('/session', function (req, res, next) {
             res.status(500).send(err);
         });
 });
+router.post('/sessionEmail', function (req, res, next) {
+
+
+    db.db.collection('users').findOne({ email: req.body.email})
+        .then((user) => {
+            console.log(user);
+            res.json(user);
+        }).catch((err) => {
+            res.status(500).send(err);
+        });
+});
 
 module.exports = router;

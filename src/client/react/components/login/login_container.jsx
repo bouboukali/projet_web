@@ -78,7 +78,7 @@ class LoginContainer extends React.Component {
     // appelé quand appuyé sur submit button
     authenticate(event) {
 
-        const { login } = this.props; // méthode login
+        //const { login,login2 } = this.props; // méthode login
         const { email, password } = this.state; // PROF AVAIT MIS this.props ERREUR ???
 
         event.preventDefault();
@@ -111,6 +111,7 @@ class LoginContainer extends React.Component {
                         authenticate={this.authenticate}
                         onFieldChange={this.onFieldChange}
                         login={auth0Client.signIn}
+                        login2={auth0Client.signIn2}
                     >
                         {/*this.props.login()*/}
                     </LoginComponent>

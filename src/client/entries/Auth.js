@@ -5,27 +5,32 @@ import axios from 'axios';
 class Auth extends EventEmitter {
     constructor(clientId, domain) {
         super();
+        this.type=null;
 
 
-
-        this.lock = new Auth0LockPasswordless(clientId, domain, {
-            allowedConnections: ['sms'],
-            auth: {
+        this.lock = new Auth0LockPasswordless(clientId, domain,{
+            auth:{
                 redirectUrl: process.env.NODE_ENV === 'development' ? process.env.CALLBACK_URL_DEVELOPMENT : process.env.CALLBACK_URL_PRODUCTION,
                 responseType: 'token id_token'
             }
         });
+        
 
-
+        this.getType = this.getType.bind(this);
         this.getUser = this.getUser.bind(this);
         this.getProfile = this.getProfile.bind(this);
         this.handleAuthentication = this.handleAuthentication.bind(this);
         this.isAuthenticated = this.isAuthenticated.bind(this);
         this.signIn = this.signIn.bind(this);
+        this.signIn2 = this.signIn2.bind(this);
         this.signOut = this.signOut.bind(this);
     }
+    getType(){
+        return this.type;
+    }
     getUser(){
-
+        console.log(this.getType())
+        if(this.getType()=='sms'){  
        return new Promise((resolve,reject) =>{
         axios.post('/api/callbacks/session', {
             phone: this.profile.nickname,
@@ -41,8 +46,26 @@ class Auth extends EventEmitter {
                 reject(error);
 
             });
-       }) 
-        //return this.user;
+       })
+    }else{
+        console.log(this.profile.name)
+        return new Promise((resolve,reject) =>{
+            axios.post('/api/callbacks/sessionEmail', {
+                email: this.profile.name,
+            }, {
+                    headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
+                })
+    
+                .then((user) => {  
+                    console.log(user)             
+                        resolve(user.data);
+                })
+                .catch((error) => {
+                    reject(error);
+    
+                });
+           })
+        } 
     }
 
     getProfile() {
@@ -60,55 +83,50 @@ class Auth extends EventEmitter {
     }
 
     signIn() {
-
+      const  options = {
+            allowedConnections: ['sms'],
+           
+        };
+        //this.type=1;
+        
+        this.lock.show(options);
+    }
+    signIn2() {
+        //this.type=2;
+        const  options = {
+            allowedConnections: ['email'],
+            passwordlessMethod: 'code',
+            
+        };
         //this.auth0.authorize();
-        this.lock.show();
+        this.lock.show(options);
     }
 
     handleAuthentication() {
 
-
-        /*this.lock.on('authenticated', function (authResult) {
-
-            if (authResult && authResult.accessToken && authResult.idToken) {
-                console.log("okkkkk")
-                console.log(authResult)
-               
-                this.idToken = authResult.idToken;
-                this.profile = authResult.idTokenPayload;
-                
-                this.expiresAt = authResult.idTokenPayload.exp * 1000;
-
-            }
-        });*/
-
+        console.log(this.type)
         return new Promise((resolve, reject) => {
 
             this.lock.on('authenticated', function (authResult) {
-
-                /*if (!authResult || !authResult.idToken) {
-                    return reject(err);
-                }*/
 
                 this.setSession(authResult);
                 resolve();
 
             }.bind(this));
-
-            /*this.auth0.parseHash((err, authResult) => {
-                 if (err) return reject(err);
-                 if (!authResult || !authResult.idToken) {
-                     return reject(err);
-                 }
-                 this.setSession(authResult);
-                 resolve();
-             });*/
         })
     }
 
     setSession(authResult) {
+        console.log(authResult);
         this.idToken = authResult.idToken;
         this.profile = authResult.idTokenPayload;
+        console.log(this.profile)
+        if(this.profile.email !=null){
+            this.type = 'email';
+        }else{
+            this.type = 'sms';
+        }
+        console.log(this.type);
         // set the time that the id token will expire at
         this.expiresAt = authResult.idTokenPayload.exp * 1000;
 
@@ -116,6 +134,7 @@ class Auth extends EventEmitter {
     }
 
     signOut() {
+    //if(this.type==1){
 
         this.lock.logout({
             returnTo: process.env.NODE_ENV === 'development' ? process.env.LOGOUT_URL_DEVELOPMENT : process.env.LOGOUT_URL_PRODUCTION
@@ -124,6 +143,7 @@ class Auth extends EventEmitter {
     }
 
     silentAuth() {
+
         return new Promise((resolve, reject) => {
 
 
